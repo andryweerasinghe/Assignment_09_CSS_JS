@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Knight Rider</title>
+
+    <style>
+        body{
+            background-color: black;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+        .light{
+            display: inline-block;
+            background-color: aliceblue;
+            width: 100px;
+            height: 50px;
+            box-shadow: 50px 50px 50px 50px;
+
+        }
+        .light_on{
+            background-color: #D00000;
+            box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.5);
+        }
+        .light_blue{
+            background-color: #000022;
+            box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.5);
+        }
+        button{
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 2px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+<section>
+    <div class="light" id="1"></div>
+    <div class="light" id="2"></div>
+    <div class="light" id="3"></div>
+    <div class="light" id="4"></div>
+    <div class="light" id="5"></div>
+    <div class="light" id="6"></div>
+</section>
+<button id="start">Start</button>
+<button id="stop">Stop</button>
+
+<audio id="playAudio">
+    <source src="assets/audio/audio.mp3" type="audio/mp3">
+</audio>
+
+<script src="assets/lib/jquery-3.7.1.min.js"></script>
+
+<script>
+    var currentLightIndex = 0;
+    var maxLightCount = 6;
+    var move = "RIGHT";
+
+    function updateLightPanel() {
+        $('.light').removeClass('light_on')
+        $('.light').removeClass('light_blue')
+        $('.light').eq(currentLightIndex).addClass("light_on");
+        if (move == "RIGHT") {
+            if (currentLightIndex !== 0) $('.light').eq(currentLightIndex - 1).addClass("light_blue");
+
+            ++currentLightIndex;
+            if (currentLightIndex > maxLightCount - 2) {
+                move = "LEFT";
+            }
+        } else {
+            $('.light').eq(currentLightIndex + 1).addClass("light_blue");
+            --currentLightIndex;
+            if (currentLightIndex < 1) {
+                move = "RIGHT";
+            }
+        }
+    }
+
+    $('#start').on('click',() => {
+        console.log("start");
+        Q = setInterval(updateLightPanel, 75);
+        $('#playAudio')[0].play();
+    });
+
+    $('#stop').on('click',() => {
+        console.log("stop");
+        clearInterval(Q);
+        $('#playAudio')[0].pause();
+    });
+</script>
+
+
+</body>
+</html>
